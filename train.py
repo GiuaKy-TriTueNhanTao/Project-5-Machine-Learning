@@ -52,8 +52,13 @@ def train_regression(model, dataset):
 
     dataloader = DataLoader(
         dataset,
-        batch_size=64,
+        batch_size=32,
         shuffle=True
+    )
+    evaluation_dataloader = DataLoader(
+        dataset,
+        batch_size=32,
+        shuffle=False
     )
 
     optimizer = optim.Adam(
@@ -61,7 +66,9 @@ def train_regression(model, dataset):
         lr=0.001
     )
 
-    for epoch in range(1000):
+    model.train()
+
+    for epoch in range(5000):
 
         for batch in dataloader:
 
@@ -78,7 +85,15 @@ def train_regression(model, dataset):
 
             optimizer.step()
 
-        if loss.item() < 0.02:
+        total_loss = 0.0
+        with no_grad():
+            for batch in evaluation_dataloader:
+                x = batch['x']
+                y = batch['label']
+                loss = regression_loss(model(x), y)
+                total_loss += loss.item() * len(x)
+
+        if total_loss / len(dataset) < 0.015:
             return
 
 

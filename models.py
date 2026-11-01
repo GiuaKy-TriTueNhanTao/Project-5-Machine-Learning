@@ -88,9 +88,9 @@ class RegressionModel(Module):
         "*** YOUR CODE HERE ***"
         super().__init__()
 
-        self.fc1 = Linear(1, 128)
-        self.fc2 = Linear(128, 128)
-        self.fc3 = Linear(128, 1)
+        self.fc1 = Linear(1, 256)
+        self.fc2 = Linear(256, 256)
+        self.fc3 = Linear(256, 1)
 
    
 
