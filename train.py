@@ -108,6 +108,54 @@ def train_languageid(model, dataset):
     """
     model.train()
     "*** YOUR CODE HERE ***"
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+    batch_size = 64
+
+    train_loader = DataLoader(
+        dataset,
+        batch_size=batch_size,
+        shuffle=True
+    )
+
+    for epoch in range(60):
+        model.train()
+
+        for batch in train_loader:
+            x = batch["x"]
+            y = batch["label"]
+
+            # Chuyển từ (batch, length, 47)
+            # sang (length, batch, 47)
+            x = movedim(x, 0, 1)
+
+            # Chuyển tensor thành danh sách ký tự
+            xs = list(x.unbind(dim=0))
+
+            optimizer.zero_grad()
+
+            # Forward
+            y_pred = model(xs)
+
+            # Tính loss
+            loss = languageid_loss(y_pred, y)
+
+            # Backpropagation
+            loss.backward()
+
+            # Cập nhật trọng số
+            optimizer.step()
+
+        # Đánh giá sau mỗi epoch
+        model.eval()
+        accuracy = dataset.get_validation_accuracy()
+
+        print(
+            f"Epoch {epoch + 1}: "
+            f"Accuracy = {accuracy:.4f}"
+        )
+
+        if accuracy >= 0.85:
+            break
 
 
 

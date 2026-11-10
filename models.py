@@ -169,6 +169,19 @@ class LanguageIDModel(Module):
         super(LanguageIDModel, self).__init__()
         "*** YOUR CODE HERE ***"
         # Initialize your model parameters here
+        self.hidden_size = 256
+
+        self.input_layer = Linear(
+            self.num_chars, self.hidden_size
+        )
+
+        self.hidden_layer = Linear(
+            self.hidden_size, self.hidden_size
+        )
+
+        self.output_layer = Linear(
+            self.hidden_size, len(self.languages)
+        )
 
 
 
@@ -202,6 +215,20 @@ class LanguageIDModel(Module):
                 (also called logits)
         """
         "*** YOUR CODE HERE ***"
+         # Khởi tạo trạng thái ẩn từ ký tự đầu tiên
+        h = relu(self.input_layer(xs[0]))
+
+        # Xử lý lần lượt các ký tự tiếp theo
+        for x in xs[1:]:
+            input_features = self.input_layer(x)
+            hidden_features = self.hidden_layer(h)
+
+            h = relu(input_features + hidden_features)
+
+        # Chuyển trạng thái ẩn cuối thành 5 điểm số
+        logits = self.output_layer(h)
+
+        return logits
 
 
 
@@ -226,6 +253,24 @@ def Convolve(input: tensor, weight: tensor):
     Output_Tensor = tensor(())
     "*** YOUR CODE HERE ***"
 
+    input_height, input_width = input_tensor_dimensions
+    kernel_height, kernel_width = weight_dimensions
+
+    output_height = input_height - kernel_height + 1
+    output_width = input_width - kernel_width + 1
+
+    Output_Tensor = zeros((output_height, output_width))
+
+    for y in range(output_height):
+        for x in range(output_width):
+            region = input[
+                y:y + kernel_height,
+                x:x + kernel_width
+            ]
+
+            Output_Tensor[y, x] = tensordot(
+                region, weight, dims=2
+            )
     "*** End Code ***"
     return Output_Tensor
 
