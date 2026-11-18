@@ -30,7 +30,18 @@ def train_perceptron(model, dataset):
     """
     with no_grad():
         dataloader = DataLoader(dataset, batch_size=1, shuffle=True)
-        "*** YOUR CODE HERE ***"
+        while True:
+            mistakes = 0
+            for batch in dataloader:
+                x = batch["x"]
+                y = batch["label"]
+
+                if model.get_prediction(x) != y.item():
+                    model.w += y * x
+                    mistakes += 1
+
+            if mistakes == 0:
+                break
 
 
 def train_regression(model, dataset):
@@ -206,10 +217,7 @@ def train_languageid(model, dataset):
 
 
 def Train_DigitConvolution(model, dataset):
-    """git add .
-git commit -m "Merge feature/vi-anh vao main"
-
-
+    """
     Trains the model.
     """
     """ YOUR CODE HERE """

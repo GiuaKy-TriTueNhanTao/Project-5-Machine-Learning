@@ -136,7 +136,9 @@ class DigitClassificationModel(Module):
         super().__init__()
         input_size = 28 * 28
         output_size = 10
-        "*** YOUR CODE HERE ***"
+        self.fc1 = Linear(input_size, 256)
+        self.fc2 = Linear(256, 128)
+        self.fc3 = Linear(128, output_size)
 
 
     def forward(self, x):
@@ -153,7 +155,9 @@ class DigitClassificationModel(Module):
             A node with shape (batch_size x 10) containing predicted scores
                 (also called logits)
         """
-        """ YOUR CODE HERE """
+        x = relu(self.fc1(x))
+        x = relu(self.fc2(x))
+        return self.fc3(x)
 
 
 
