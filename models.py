@@ -41,7 +41,7 @@ class PerceptronModel(Module):
         """
         super(PerceptronModel, self).__init__()
 
-        "*** YOUR CODE HERE ***"
+        self.w = Parameter(ones(1, dimensions))
 
 
     def get_weights(self):
@@ -60,7 +60,7 @@ class PerceptronModel(Module):
 
         The pytorch function `tensordot` may be helpful here.
         """
-        "*** YOUR CODE HERE ***"
+        return matmul(x, self.w.T).reshape(-1)
 
         
 
@@ -72,7 +72,7 @@ class PerceptronModel(Module):
         """
         score = self(x)
 
-        "*** YOUR CODE HERE ***"
+        return 1 if score.item() >= 0 else -1
 
 
 
@@ -320,4 +320,11 @@ class Attention(Module):
         """
         B, T, C = input.size()
 
-        """YOUR CODE HERE"""
+        queries = self.q_layer(input)
+        keys = self.k_layer(input)
+        values = self.v_layer(input)
+
+        scores = matmul(queries, movedim(keys, 1, 2)) / (self.layer_size ** 0.5)
+        scores = scores.masked_fill(self.mask[:, :, :T, :T] == 0, float('-inf'))[0]
+        attention_weights = softmax(scores, dim=-1)
+        return matmul(attention_weights, values)
