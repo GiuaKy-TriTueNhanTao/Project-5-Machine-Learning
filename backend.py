@@ -25,6 +25,8 @@ def maybe_sleep_and_close(seconds):
                 fig.canvas.start_event_loop(1e-3)
             except:
                 pass
+        plt.show(block=True)
+
 
 def get_data_path(filename):
     path = os.path.join(
@@ -302,12 +304,22 @@ class DigitClassificationDataset(Custom_Dataset):
 
         return {'x': x, 'label': y}
 
+    
     def get_validation_accuracy(self):
         dev_logits = self.model(torch.tensor(self.dev_images)).data
         dev_predicted = np.argmax(dev_logits, axis=1).detach().numpy()
 
         dev_accuracy = np.mean(dev_predicted == self.dev_labels)
+
+        if use_graphics and dev_accuracy >= 0.98:
+            self.status.set_text(
+                f"Validation accuracy: {dev_accuracy:.2%}"
+            )
+            self.fig.canvas.draw_idle()
+            plt.show(block=True)
+
         return dev_accuracy
+
 
 class LanguageIDDataset(Custom_Dataset):
     def __init__(self, model):
