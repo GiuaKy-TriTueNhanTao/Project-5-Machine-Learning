@@ -50,6 +50,52 @@ def train_regression(model, dataset):
     """
     "*** YOUR CODE HERE ***"
 
+    dataloader = DataLoader(
+        dataset,
+        batch_size=32,
+        shuffle=True
+    )
+    evaluation_dataloader = DataLoader(
+        dataset,
+        batch_size=32,
+        shuffle=False
+    )
+
+    optimizer = optim.Adam(
+        model.parameters(),
+        lr=0.001
+    )
+
+    model.train()
+
+    for epoch in range(5000):
+
+        for batch in dataloader:
+
+            x = batch['x']
+            y = batch['label']
+
+            optimizer.zero_grad()
+
+            y_pred = model(x)
+
+            loss = regression_loss(y_pred, y)
+
+            loss.backward()
+
+            optimizer.step()
+
+        total_loss = 0.0
+        with no_grad():
+            for batch in evaluation_dataloader:
+                x = batch['x']
+                y = batch['label']
+                loss = regression_loss(model(x), y)
+                total_loss += loss.item() * len(x)
+
+        if total_loss / len(dataset) < 0.015:
+            return
+
 
 def train_digitclassifier(model, dataset):
     """
