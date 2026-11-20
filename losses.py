@@ -10,8 +10,6 @@ def regression_loss(y_pred, y):
             to be used for training
     Returns: a tensor of size 1 containing the loss
     """
-    "*** YOUR CODE HERE ***"
-
     return mse_loss(y_pred, y)
 
 
@@ -47,7 +45,6 @@ def languageid_loss(y_pred, y):
         y: a node with shape (batch_size x 5)
     Returns: a loss node
     """
-    "*** YOUR CODE HERE ***"
     return cross_entropy(y_pred, y.argmax(dim=1))
 
 
@@ -64,6 +61,5 @@ def digitconvolution_Loss(y_pred, y):
         y: a node with shape (batch_size x 10)
     Returns: a loss tensor
     """
-    """ YOUR CODE HERE """
     return cross_entropy(y_pred, y).reshape(1)
     

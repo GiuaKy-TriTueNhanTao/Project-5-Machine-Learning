@@ -37,7 +37,6 @@ class PerceptronModel(Module):
 
         where weight_vector is a pytorch Tensor of dimension 'dimensions'
 
-        Hint: You can use ones(dim) to create a tensor of dimension dim.
         """
         super(PerceptronModel, self).__init__()
 
@@ -85,7 +84,6 @@ class RegressionModel(Module):
 
     def __init__(self):
         # Initialize your model parameters here
-        "*** YOUR CODE HERE ***"
         super().__init__()
 
         self.fc1 = Linear(1, 256)
@@ -103,8 +101,6 @@ class RegressionModel(Module):
         Returns:
             A node with shape (batch_size x 1) containing predicted y-values
         """
-        "*** YOUR CODE HERE ***"
-
         x = self.fc1(x)
         x = relu(x)
 
@@ -178,7 +174,6 @@ class LanguageIDModel(Module):
         self.num_chars = 47
         self.languages = ["English", "Spanish", "Finnish", "Dutch", "Polish"]
         super(LanguageIDModel, self).__init__()
-        "*** YOUR CODE HERE ***"
         # Initialize your model parameters here
         self.hidden_size = 256
 
@@ -225,7 +220,6 @@ class LanguageIDModel(Module):
             A node with shape (batch_size x 5) containing predicted scores
                 (also called logits)
         """
-        "*** YOUR CODE HERE ***"
          # Khởi tạo trạng thái ẩn từ ký tự đầu tiên
         h = relu(self.input_layer(xs[0]))
 
@@ -262,8 +256,6 @@ def Convolve(input: tensor, weight: tensor):
     input_tensor_dimensions = input.shape
     weight_dimensions = weight.shape
     Output_Tensor = tensor(())
-    "*** YOUR CODE HERE ***"
-
     output_height = input_tensor_dimensions[0] - weight_dimensions[0] + 1
     output_width = input_tensor_dimensions[1] - weight_dimensions[1] + 1
     Output_Tensor = zeros((output_height, output_width))
@@ -291,7 +283,6 @@ def Convolve(input: tensor, weight: tensor):
             Output_Tensor[y, x] = tensordot(
                 region, weight, dims=2
             )
-    "*** End Code ***"
     return Output_Tensor
 
 
@@ -313,7 +304,6 @@ class DigitConvolutionalModel(Module):
         output_size = 10
 
         self.convolution_weights = Parameter(ones((3, 3)))
-        """ YOUR CODE HERE """
         self.hidden_layer = Linear(26 * 26, 64)
         self.output_layer = Linear(64, output_size)
 
@@ -328,7 +318,6 @@ class DigitConvolutionalModel(Module):
             list(map(lambda sample: Convolve(sample, self.convolution_weights), x))
         )
         x = x.flatten(start_dim=1)
-        """ YOUR CODE HERE """
         x = relu(self.hidden_layer(x))
         return self.output_layer(x)
 
@@ -377,5 +366,4 @@ class Attention(Module):
         scores = scores.masked_fill(self.mask[:, :, :T, :T] == 0, float('-inf'))[0]
         attention_weights = softmax(scores, dim=-1)
         return matmul(attention_weights, values)
-        """YOUR CODE HERE"""
 

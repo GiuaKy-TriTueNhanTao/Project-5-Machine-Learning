@@ -34,7 +34,6 @@ class Transformer_Block(nn.Module):
 
 
     def forward(self, x):
-        """YOUR CODE HERE"""
         x = self.norm_1(x + self.attn_block(x))
         x = self.norm_2(x + F.relu(self.linear_1(x)))
         return x
@@ -70,7 +69,6 @@ class Character_GPT(nn.Module):
         b, t = input.size()
         assert t <= self.block_size, f"Cannot forward sequence of length {t}, block size is only {self.block_size}"
 
-        """YOUR CODE HERE"""
         x = self.embed(input) # Embeddings of input
        
         #Go through every transformer block in self.transformer_blocks
