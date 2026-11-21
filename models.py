@@ -198,25 +198,9 @@ class LanguageIDModel(Module):
 
 
 def Convolve(input: tensor, weight: tensor):
-    """
-    Acts as a convolution layer by applying a 2d convolution with the given inputs and weights.
-    DO NOT import any pytorch methods to directly do this, the convolution must be done with only the functions
-    already imported.
-
-    There are multiple ways to complete this function. One possible solution would be to use 'tensordot'.
-    If you would like to index a tensor, you can do it as such:
-
-    tensor[y:y+height, x:x+width]
-
-    This returns a subtensor who's first element is tensor[y,x] and has height 'height, and width 'width'
-
-    The method 'zeros((y_dim,x_dim))' may also be useful. It initializes a pytorch tensor with dimensions (y_dim, x_dim), with every value
-    set to zero.
-    """
     input_tensor_dimensions = input.shape
     weight_dimensions = weight.shape
     Output_Tensor = tensor(())
-    "*** YOUR CODE HERE ***"
 
     output_height = input_tensor_dimensions[0] - weight_dimensions[0] + 1
     output_width = input_tensor_dimensions[1] - weight_dimensions[1] + 1
@@ -227,44 +211,29 @@ def Convolve(input: tensor, weight: tensor):
                 input[y:y + output_height, x:x + output_width] * weight[y, x]
             )
 
-    "*** End Code ***"
     return Output_Tensor
 
 
 class DigitConvolutionalModel(Module):
-    """
-    A model for handwritten digit classification using the MNIST dataset.
-
-    This class is a convolutational model which has already been trained on MNIST.
-    if Convolve() has been correctly implemented, this model should be able to achieve a high accuracy
-    on the mnist dataset given the pretrained weights.
-
-    Note that this class looks different from a standard pytorch model since we don't need to train it
-    as it will be run on preset weights.
-    """
 
     def __init__(self):
-        # Initialize your model parameters here
         super().__init__()
         output_size = 10
 
         self.convolution_weights = Parameter(ones((3, 3)))
-        """ YOUR CODE HERE """
+
         self.hidden_layer = Linear(26 * 26, 64)
         self.output_layer = Linear(64, output_size)
 
 
     def forward(self, x):
-        """
-        The convolutional layer is already applied, and the output is flattened for you. You should treat x as
-        a regular 1-dimensional datapoint now, similar to the previous questions.
-        """
+
         x = x.reshape(len(x), 28, 28)
         x = stack(
             list(map(lambda sample: Convolve(sample, self.convolution_weights), x))
         )
         x = x.flatten(start_dim=1)
-        """ YOUR CODE HERE """
+
         x = relu(self.hidden_layer(x))
         return self.output_layer(x)
 
