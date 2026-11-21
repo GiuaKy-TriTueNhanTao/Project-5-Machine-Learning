@@ -79,10 +79,7 @@ def train_languageid(model, dataset):
 
 
 def Train_DigitConvolution(model, dataset):
-    """
-    Trains the model.
-    """
-    """ YOUR CODE HERE """
+
     model.train()
     dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
     optimizer = optim.Adam(model.parameters(), lr=0.001)
