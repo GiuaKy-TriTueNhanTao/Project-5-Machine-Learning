@@ -1,0 +1,7 @@
+question,metric,validation,test,note
+1,accuracy,99.80%,99.70%,"train=100.00%; 1,000 synthetic holdout points per split"
+2,MSE (accuracy N/A),0.013284,0.013236,train MSE=0.014122; independent uniform x samples
+3,accuracy,98.02%,97.42%,"official MNIST dev/test split; 5,000 each"
+4,accuracy,85.60%,85.40%,true dev and test splits
+5,accuracy,100.00%,100.00%,provided small split; 50 each; source images overlap training subset
+6,accuracy N/A (attention),N/A,N/A,"output shape=(1, 12, 16); causal upper-triangle weights are zero"
